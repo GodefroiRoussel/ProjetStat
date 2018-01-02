@@ -14,12 +14,20 @@ bar <- ggplot(vacances, aes(x = factor(1), fill = factor(modevacances)))+ geom_b
   xlab(" ") + ylab(" ") +   theme(plot.title = element_text(hjust = 0.5))
 
 
+
+# Rapport distance/situation
+matrice<-prop.table( table(donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q97 [1]`),2)*100
+barplot(matrice,main="Situation personelle par apport \n à la distance effectuée en vacances",beside=FALSE, col=c("#00FFFF","#00FF80","#FFFF00","#FF0000", "#FF8000", "#000000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
+barplot(matrice,main="Situation personelle par apport \n à la distance effectuée en vacances",ylab="Pourcentage par enfant",beside=TRUE, col=c("#00FFFF","#00FF80","#FFFF00","#FF0000", "#FF8000", "#000000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
+legend(x="topleft",legend=c("Autre", "En couple avec enfant(s)", "En couple sans enfant", "NRP", "Seul(e) avec enfants", " Seul(e) sans enfant "),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000", "#FF8000", "#000000"),bty="n")
+matrice
+
+
+
 # Rapport distance/enfants
-# Deux graphiques, à vous de choisir celui qui vous parait le plus parlant
-# problème sur les couleurs du deuxième
 matrice<-prop.table( table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q97 [1]`),2)*100
-barplot(matrice,main="Pourcentage du nombre d'enfants par distance",ylab="Pourcentage par enfant",beside=FALSE, col=c("#00FFFF","#00FF80","#FFFF00","#FF0000", "#FF8000", "#000000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
-barplot(matrice,main="Pourcentage du nombre d'enfants par distance",ylab="Pourcentage par enfant",beside=TRUE, col=c("#00FFFF","#00FF80","#FFFF00","#FF0000", "#FF8000", "#000000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
-legend(x="topleft",legend=c("1 enfant", "2 enfants", "3 enfants", "4 enfants", "5 enfants", "6 enfants"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000", "#FF8000", "#000000"),bty="n")
+barplot(matrice,main="Pourcentage du nombre d'enfants par distance",ylab="Pourcentage par enfant",beside=FALSE, col=c("#FFFFFF", "#00FFFF","#00FF80","#FFFF00","#FF0000", "#FF8000", "#000000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
+barplot(matrice,main="Pourcentage du nombre d'enfants par distance",ylab="Pourcentage par enfant",beside=TRUE, col=c("#FFFFFF", "#00FFFF","#00FF80","#FFFF00","#FF0000", "#FF8000", "#000000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
+legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants", "4 enfants", "5 enfants", "6 enfants"),cex=1,fill=c("#FFFFFF", "#00FFFF","#00FF80","#FFFF00","#FF0000", "#FF8000", "#000000"),bty="n")
 matrice
 
