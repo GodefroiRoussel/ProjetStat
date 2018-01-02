@@ -13,7 +13,7 @@ vacances <-data.frame(count=prop.table(table(vacances$`Q87 [1]`)), rep=c("Non","
 bar <- ggplot(vacances, aes(x = factor(1), fill = factor(modevacances)))+ geom_bar(width = 1) + ggtitle("Partez-vous en vacances?") +
   xlab(" ") + ylab(" ") +   theme(plot.title = element_text(hjust = 0.5))
 
-#
+
 # Rapport distance/enfants
 # Deux graphiques, à vous de choisir celui qui vous parait le plus parlant
 # problème sur les couleurs du deuxième
