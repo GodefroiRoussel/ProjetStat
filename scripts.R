@@ -25,8 +25,8 @@ matrice[2,] <- colSums(matrice[2:3,], na.rm = FALSE, dims = 1) #Regroupe les per
 matrice <- matrice[-(3),] # Supprime les non réponses
 matrice
 colnames(matrice) <- c("Moins de 100 km", "Entre 100 et 500 km", "Entre 500 et 1000 km", "Plus de 1 000 km")
-barplot(matrice,main="Situation personelle par apport \n à la distance effectuée en vacances",beside=FALSE, col=c("#00FFFF","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
-barplot(matrice,main="Situation personelle par apport \n à la distance effectuée en vacances",ylab="Pourcentage par enfant",beside=TRUE, col=c("#00FFFF","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
+barplot(matrice,main="Situation personnelle par apport \n à la distance effectuée en vacances",beside=FALSE, col=c("#00FFFF","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
+barplot(matrice,main="Situation personnelle par apport \n à la distance effectuée en vacances",ylab="Pourcentage par enfant",beside=TRUE, col=c("#00FFFF","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants") 
 legend(x="topleft",legend=c("En couple", "Seul(e)"),cex=1,fill=c("#00FFFF","#FF0000"),bty="n")
 matrice
 
@@ -37,8 +37,8 @@ matrice<-prop.table( table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire
 matrice[4,] <- colSums(matrice[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
 matrice <- matrice[-(5:7),] # Supprime les lignes 4,5,6
 colnames(matrice) <- c("Moins de 100 km", "Entre 100 et 500 km", "Entre 500 et 1000 km", "Plus de 1 000 km")
-barplot(matrice,main="Pourcentage du nombre d'enfants par distance",ylab="Pourcentage par enfant",beside=FALSE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
-barplot(matrice,main="Pourcentage du nombre d'enfants par distance",ylab="Pourcentage par enfant",beside=TRUE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
+barplot(matrice,main="Nombre d'enfants par apport \n à la distance effectuée en vacances",ylab="Pourcentage par enfant",beside=FALSE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
+barplot(matrice,main=" Nombre d'enfants par apport \n à la distance effectuée en vacances",ylab="Pourcentage par enfant",beside=TRUE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
 legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
 matrice
 
