@@ -42,3 +42,14 @@ barplot(matrice,main=" Nombre d'enfants par apport \n à la distance effectuée 
 legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
 matrice
 
+# départ en vacances 
+matrice <- donnéesQuestionnaire$`Q87 [1]`
+matrice <- table(matrice[matrice %in% c("1","2","3","4","5")])
+matrice<-prop.table(matrice)*100
+names(matrice) <- c("en couple sans enfant","en couple avec vos enfants","avec des amis","en famille (parents, beaux-parents, frères, sœurs, ...)","en solitaire")
+matrice <- data.frame(matrice)
+ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) + geom_bar(width = 1,stat="identity")+coord_polar(theta = "y") + theme(panel.grid=element_blank()) +
+  theme(axis.ticks=element_blank()) + labs(title="Avec qui partez vous en vacances ?", x="", y="", fill="")+ geom_label(
+    aes(y = matrice$Freq, label = paste(round(matrice$Freq,1), " %")), 
+    hjust = c(1.2,0.5,-0.8,-0.5,1.1), size = 2, show.legend = FALSE
+  )
