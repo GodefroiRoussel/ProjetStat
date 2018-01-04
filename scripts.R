@@ -2,6 +2,7 @@
 #Imports
 library(ggplot2)
 library(plyr)
+install.packages("dplyr")
 library(readxl)
 donnéesQuestionnaire <- read_excel("donneesVacances.xlsx", sheet="SurveyData_20170220_15h18")
 
@@ -65,3 +66,22 @@ ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) 
     aes(y = matrice$Freq, label = paste(round(matrice$Freq,1), " %")), 
     x = c(1,0), y=c(0,0), size = 2, show.legend = FALSE
 )
+
+# situation:prudence 
+# TODO: supprimer la colonne NRP
+matrice<- table(donnéesQuestionnaire$`Q117 [1]`, donnéesQuestionnaire$`Q11 [1]`)
+rownames(matrice) <- c("moins attentif", "plus attentif", "ne change pas")
+matrice <- data.frame(prop.table(matrice)*100)
+matrice
+
+# situation:centre_interet 
+# TODO: supprimer la colonne NRP
+# Garder les personnes avec / sans enfants ? 
+matrice<- table(donnéesQuestionnaire$`Q103 [1]`, donnéesQuestionnaire$`Q11 [1]`)
+matrice<-matrice[1:4,]
+rownames(matrice) <- c("Tourisme culturel", "Belles routes, paysages,", "Rassemblements, manifestations sportives","Rendre visite à des amis ou de la famille")
+matrice <- data.frame(prop.table(matrice)*100)
+matrice
+
+
+
