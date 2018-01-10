@@ -43,7 +43,6 @@ barplot(matrice,main=" Nombre d'enfants par apport \n à la distance effectuée 
 legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
 matrice
 
-<<<<<<< HEAD
 # Rapport matériel de dépannage/enfants
 matrice<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q119 [1]`)
 matrice[4,] <- colSums(matrice[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
@@ -81,7 +80,7 @@ colnames(matrice) <- c("Oui", "Non")
 barplot(matrice,main="Proportion des personnes effectuant \n une révision de leur 2-roues avant leur départ \n par rapport au nombre d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
 legend(x="topleft",legend=c("0 enfants", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
 matrice
-=======
+
 # départ en vacances avec qui ?
 matrice <- donnéesQuestionnaire$`Q87 [1]`
 matrice <- table(matrice[matrice %in% c("1","2","3","4","5")])
@@ -121,7 +120,3 @@ matrice<-matrice[1:4,]
 rownames(matrice) <- c("Tourisme culturel", "Belles routes, paysages,", "Rassemblements, manifestations sportives","Rendre visite à des amis ou de la famille")
 matrice <- data.frame(prop.table(matrice)*100)
 matrice
-
-
-
->>>>>>> 6fe04d2b747453dc458761fc1b10ff2974ea2624
