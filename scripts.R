@@ -2,6 +2,7 @@
 #Imports
 library(ggplot2)
 library(plyr)
+install.packages("dplyr")
 library(readxl)
 donnéesQuestionnaire <- read_excel("donneesVacances.xlsx", sheet="SurveyData_20170220_15h18")
 
@@ -42,6 +43,7 @@ barplot(matrice,main=" Nombre d'enfants par apport \n à la distance effectuée 
 legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
 matrice
 
+<<<<<<< HEAD
 # Rapport matériel de dépannage/enfants
 matrice<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q119 [1]`)
 matrice[4,] <- colSums(matrice[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
@@ -79,3 +81,47 @@ colnames(matrice) <- c("Oui", "Non")
 barplot(matrice,main="Proportion des personnes effectuant \n une révision de leur 2-roues avant leur départ \n par rapport au nombre d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
 legend(x="topleft",legend=c("0 enfants", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
 matrice
+=======
+# départ en vacances avec qui ?
+matrice <- donnéesQuestionnaire$`Q87 [1]`
+matrice <- table(matrice[matrice %in% c("1","2","3","4","5")])
+matrice<-prop.table(matrice)*100
+names(matrice) <- c("en couple sans enfant","en couple avec vos enfants","avec des amis","en famille (parents, beaux-parents, frères, sœurs, ...)","en solitaire")
+matrice <- data.frame(matrice)
+ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) + geom_bar(width = 1,stat="identity")+coord_polar(theta = "y") + theme(panel.grid=element_blank()) +
+  theme(axis.ticks=element_blank()) + labs(title="Avec qui partez vous en vacances ?", x="", y="", fill="")+ geom_label(
+    aes(y = matrice$Freq, label = paste(round(matrice$Freq,1), " %")), 
+    hjust = c(1.2,0.5,-0.8,-0.5,1.1), size = 2, show.legend = FALSE
+  )
+
+# départ en vacances Oui/Non
+matrice <- donnéesQuestionnaire$`Q87 [1]`
+matrice <- prop.table(table(donnéesQuestionnaire$`Q84 [1]`))
+names(matrice) <- c("Non","Oui")
+matrice <- data.frame(matrice)
+matrice$Freq <- matrice$Freq*100
+ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) + geom_bar(width = 1,stat="identity")+coord_polar(theta = "y") + theme(panel.grid=element_blank()) +
+  theme(axis.ticks=element_blank()) + labs(title="Partez vous en vacances ?", x="", y="", fill="")+ geom_label(
+    aes(y = matrice$Freq, label = paste(round(matrice$Freq,1), " %")), 
+    x = c(1,0), y=c(0,0), size = 2, show.legend = FALSE
+)
+
+# situation:prudence 
+# TODO: supprimer la colonne NRP
+matrice<- table(donnéesQuestionnaire$`Q117 [1]`, donnéesQuestionnaire$`Q11 [1]`)
+rownames(matrice) <- c("moins attentif", "plus attentif", "ne change pas")
+matrice <- data.frame(prop.table(matrice)*100)
+matrice
+
+# situation:centre_interet 
+# TODO: supprimer la colonne NRP
+# Garder les personnes avec / sans enfants ? 
+matrice<- table(donnéesQuestionnaire$`Q103 [1]`, donnéesQuestionnaire$`Q11 [1]`)
+matrice<-matrice[1:4,]
+rownames(matrice) <- c("Tourisme culturel", "Belles routes, paysages,", "Rassemblements, manifestations sportives","Rendre visite à des amis ou de la famille")
+matrice <- data.frame(prop.table(matrice)*100)
+matrice
+
+
+
+>>>>>>> 6fe04d2b747453dc458761fc1b10ff2974ea2624
