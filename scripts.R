@@ -42,3 +42,40 @@ barplot(matrice,main=" Nombre d'enfants par apport \n à la distance effectuée 
 legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
 matrice
 
+# Rapport matériel de dépannage/enfants
+matrice<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q119 [1]`)
+matrice[4,] <- colSums(matrice[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
+matrice <- matrice[-(5:7),] # Supprime les lignes 5,6,7
+matrice <-aperm(matrice) # transposition de la matrice
+matrice[1,] <- colSums(matrice[1:21,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
+matrice <- matrice[-(2:21),] # Supprime les lignes 5 à 21
+matrice <- aperm(matrice)
+colnames(matrice) <- c("Oui", "Non")
+matrice<-prop.table(matrice,1)*100
+barplot(matrice,main="Nombre de personnes ne prévoyant pas \n de matériel de dépannage en vacances \n par rapport au nombre d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
+legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
+matrice
+
+# Rapport vérif assurance/enfants
+matrice<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q122 [1]`)
+matrice[4,] <- colSums(matrice[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
+matrice <- matrice[-(5:7),] # Supprime les lignes 5,6,7
+matrice<-prop.table(matrice,1)*100 #pourçentage sur les lignes
+colnames(matrice) <- c("Oui", "Non")
+barplot(matrice,main="Proportion des personnes vérifiants \n leur assurance 2-roues avant de partir \n par rapport au nombre d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
+legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
+matrice
+
+# Rapport révision/enfants
+matrice<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q120 [1]`)
+matrice[4,] <- colSums(matrice[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
+matrice <- matrice[-(5:7),] # Supprime les lignes 5,6,7
+matrice<-aperm(matrice)# transposition de la matrice
+matrice[1,] <- colSums(matrice[1:3,], na.rm = FALSE, dims = 1) #Regroupe les réponses en Oui ou Non
+matrice<-matrice[-(2:3),] # Supprime les lignes 2,3
+matrice<-aperm(matrice) # transposition de la matrice
+matrice<-prop.table(matrice,1)*100 #pourçentage sur les lignes
+colnames(matrice) <- c("Oui", "Non")
+barplot(matrice,main="Proportion des personnes effectuant \n une révision de leur 2-roues avant leur départ \n par rapport au nombre d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
+legend(x="topleft",legend=c("0 enfants", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
+matrice
