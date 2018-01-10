@@ -4,6 +4,7 @@ library(ggplot2)
 library(plyr)
 install.packages("dplyr")
 library(readxl)
+library(FactoMineR)
 donnéesQuestionnaire <- read_excel("donneesVacances.xlsx", sheet="SurveyData_20170220_15h18")
 
 # Pourcentage des gens qui partent ou non en vacances
@@ -109,14 +110,17 @@ ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) 
 # TODO: supprimer la colonne NRP
 matrice<- table(donnéesQuestionnaire$`Q117 [1]`, donnéesQuestionnaire$`Q11 [1]`)
 rownames(matrice) <- c("moins attentif", "plus attentif", "ne change pas")
-matrice <- data.frame(prop.table(matrice)*100)
+matrice <- prop.table(matrice)*100
 matrice
+barplot(matrice, beside = TRUE)
 
 # situation:centre_interet 
 # TODO: supprimer la colonne NRP
 # Garder les personnes avec / sans enfants ? 
 matrice<- table(donnéesQuestionnaire$`Q103 [1]`, donnéesQuestionnaire$`Q11 [1]`)
-matrice<-matrice[1:4,]
+matrice<-matrice[1:4,c(2,3,5,6)]
 rownames(matrice) <- c("Tourisme culturel", "Belles routes, paysages,", "Rassemblements, manifestations sportives","Rendre visite à des amis ou de la famille")
-matrice <- data.frame(prop.table(matrice)*100)
-matrice
+matrice <- prop.table(matrice,2)*100
+barplot(matrice,main="Centre d'intêret en fonction de la situation",ylab="Pourcentages %",beside=TRUE, col=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,70), lwd=2, xlab="Situation",las=1)
+legend(x="topright",legend=c("Tourisme culturel", "Belles routes, paysages", "Rassemblements, manifestations sportives", "Rendre visite à des amis ou de la famille"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
+
