@@ -171,7 +171,7 @@ matrice$Freq<-round(matrice$Freq,1)
 matrice <- matrice[3:4,]
 
 ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) + geom_bar(width = 1,stat="identity")+coord_polar(theta = "y") + theme(panel.grid=element_blank()) +
-  theme(axis.ticks=element_blank()) + labs(title="Situation des personnes partant en vacances ?", x="", y="", fill="")+ geom_label(
+  theme(axis.ticks=element_blank()) + labs(title="Situation des personnes partant en vacances ?", x="", y="", fill="Situation")+ geom_label(
     aes(y = matrice$Freq, label = paste(round(matrice$Freq,1), " %")), 
     hjust = c(0,1), size = 2, show.legend = FALSE
   )
