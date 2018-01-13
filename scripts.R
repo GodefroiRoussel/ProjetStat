@@ -233,3 +233,21 @@ matrice <- prop.table(matrice,2)*100
 barplot(matrice,main="Centre d'intêret en fonction de la situation",ylab="Pourcentages %",beside=TRUE, col=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,70), lwd=2, xlab="Situation",las=1)
 legend(x="topright",legend=c("Tourisme culturel", "Belles routes, paysages", "Rassemblements, manifestations sportives", "Rendre visite à des amis ou de la famille"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
 
+# départ en vacances Oui/Non en fonction de s'ils ont des enfants
+matrice <- table(donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q84 [1]`)
+matrice <- matrice[-c(1,4),] # Supprime les lignes 1,4 (Correspond à : Autre et NPR)
+matrice[1,] <- colSums(matrice[1:2,], na.rm = FALSE, dims = 1) #Regroupe les personnes étant en couple
+matrice[3,] <- colSums(matrice[3:4,], na.rm = FALSE, dims = 1) #Regroupe les personnes étant seul(e)
+matrice <- matrice[-c(2,4),] # Supprime les lignes 2,4 (Correspond en couple sans enfant et Seul sans enfant)
+matrice <- prop.table(matrice)*100 #table de proportion
+rownames(matrice) <- c("En couple","Seul(e)")
+colnames(matrice) <- c("Non","Oui")
+matrice <- data.frame(matrice)
+matrice$Freq<-round(matrice$Freq,1)
+matrice <- matrice[3:4,]
+
+ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) + geom_bar(width = 1,stat="identity")+coord_polar(theta = "y") + theme(panel.grid=element_blank()) +
+  theme(axis.ticks=element_blank()) + labs(title="Situation des personnes partant en vacances ?", x="", y="", fill="")+ geom_label(
+    aes(y = matrice$Freq, label = paste(round(matrice$Freq,1), " %")), 
+    hjust = c(0,1), size = 2, show.legend = FALSE
+  )
