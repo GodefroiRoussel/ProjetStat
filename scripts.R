@@ -251,3 +251,23 @@ ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) 
     aes(y = matrice$Freq, label = paste(round(matrice$Freq,1), " %")), 
     hjust = c(0,1), size = 2, show.legend = FALSE
   )
+
+# nombre d'enfants parmi les gens qui partent en vacances
+matrice <- table(donnéesQuestionnaire$`Q12 [1]`, donnéesQuestionnaire$`Q84 [1]`)
+matrice[4,] <- colSums(matrice[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
+matrice <- matrice[-(5:7),] # Supprime les lignes 5,6,7
+matrice <- prop.table(matrice)*100
+matrice <- data.frame(matrice)
+matrice <- matrice[5:8,]
+matrice$Freq <- round(matrice$Freq,1) 
+
+ggplot(matrice, aes(x = factor(1), y=factor(matrice$Freq), fill=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +")) )+ geom_bar(width = 1,stat="identity")+
+  coord_polar(theta = "y") + 
+  theme(axis.text = element_blank())+
+  theme(panel.grid=element_blank()) +
+  theme(axis.ticks=element_blank()) + labs(title="Proportion des personnes partant \n en vacances suivant leur nombre \n d'enfants", x="", y="", fill="Nombre d'enfants")+
+  geom_label(
+    aes(y = matrice$Freq, label = paste(matrice$Freq, " %")), 
+    x=c(0,0,0,1),y=c(6,3,1,-0.5), size = 2, show.legend = FALSE
+  )
+  
