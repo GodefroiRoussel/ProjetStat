@@ -168,8 +168,10 @@ rownames(matrice) <- c("En couple","Seul(e)")
 colnames(matrice) <- c("Non","Oui")
 matrice <- data.frame(matrice)
 matrice$Freq<-round(matrice$Freq,1)
+matrice <- matrice[3:4,]
 
-ggplot(matrice, aes(matrice$Var1, matrice$Freq))+
-geom_bar(stat = "identity", aes(fill = matrice$Var2))+
-geom_text(label=c(paste(matrice$Freq[3]," %"),paste(matrice$Freq[4]," %"),paste(matrice$Freq[1]," %"),paste(matrice$Freq[2], " %")),color="white",vjust=0, size=3.5)+
-labs(title="Partir en vacances : célibataire ou en couples ?", x="Situation", y="Pourcentages %", fill="Réponse")
+ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) + geom_bar(width = 1,stat="identity")+coord_polar(theta = "y") + theme(panel.grid=element_blank()) +
+  theme(axis.ticks=element_blank()) + labs(title="Situation des personnes partant en vacances ?", x="", y="", fill="")+ geom_label(
+    aes(y = matrice$Freq, label = paste(round(matrice$Freq,1), " %")), 
+    hjust = c(0,1), size = 2, show.legend = FALSE
+  )
