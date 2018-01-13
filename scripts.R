@@ -167,9 +167,9 @@ matrice <- prop.table(matrice)*100 #table de proportion
 rownames(matrice) <- c("En couple","Seul(e)")
 colnames(matrice) <- c("Non","Oui")
 matrice <- data.frame(matrice)
+matrice$Freq<-round(matrice$Freq,1)
 
 ggplot(matrice, aes(matrice$Var1, matrice$Freq))+
 geom_bar(stat = "identity", aes(fill = matrice$Var2))+
+geom_text(label=c(paste(matrice$Freq[3]," %"),paste(matrice$Freq[4]," %"),paste(matrice$Freq[1]," %"),paste(matrice$Freq[2], " %")),color="white",vjust=0, size=3.5)+
 labs(title="Partir en vacances : célibataire ou en couples ?", x="Situation", y="Pourcentages %", fill="Réponse")
-
-
