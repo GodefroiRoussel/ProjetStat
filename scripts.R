@@ -5,7 +5,8 @@ library(plyr)
 install.packages("dplyr")
 library(readxl)
 library(FactoMineR)
-library("gplots2")
+install.packages("factoextra")
+library(factoextra)
 donnéesQuestionnaire <- read_excel("donneesVacances.xlsx", sheet="SurveyData_20170220_15h18")
 
 # Pourcentage des gens qui partent ou non en vacances
@@ -61,56 +62,70 @@ legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +
 matrice
 
 # Rapport matériel de dépannage/enfants
+# Rapport matériel de dépannage/enfants
 matrice1<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q119 [1]`)
 matrice1[4,] <- colSums(matrice1[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
 matrice1 <- matrice1[-(5:7),] # Supprime les lignes 5,6,7
-matrice1 <- matrice1[,-(5:21)] # Supprime les lignes Autres
+matrice1 <- aperm(matrice1)
+matrice1[1,] <- colSums(matrice1[c(1,10),])
+matrice1[7,] <- colSums(matrice1[c(7,11:15,17,18,21),])
+matrice1 <- matrice1[-c(5,6,8:21),] # Supprime les lignes Autres
+matrice1 <- aperm(matrice1)
 a <- array(c(0,0,0,0))
 a <- aperm(a)
 matrice1 <- aperm(matrice1)
-matrice1 <- rbind(matrice1[1:2,],a,matrice1[3:5,])
+matrice1 <- rbind(matrice1[1:2,],a,matrice1[3:6,])
 matrice1 <- aperm(matrice1)
-colnames(matrice1) <- c("Bombe anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
-                       "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Pas de materiel")
+colnames(matrice1) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
+                        "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Kit reparation crevaison pneus","Pas de materiel")
 rownames(matrice1) <- c("0","1","2","3+")
 
 matrice2<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q119 [2]`)
 matrice2[4,] <- colSums(matrice2[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
 matrice2 <- matrice2[-(5:7),] # Supprime les lignes 5,6,7
-matrice2 <- matrice2[,-(5:30)] # Supprime les lignes Autres
+matrice2 <- aperm(matrice2)
+matrice2[1,] <- colSums(matrice2[c(1,12,13,14),])#colonne categorie kit anti crevaison
+matrice2[8,] <- colSums(matrice2[c(8,15:27),])#colonne categorie kit repartion crevaison
+matrice2 <- matrice2[-c(5:7,9:30),] # Supprime les lignes Autres
+matrice2 <- aperm(matrice2)
 a <- array(c(0,0,0,0))
 a <- aperm(a)
 matrice2 <- aperm(matrice2)
-matrice2 <- rbind(a,matrice2,a)
+matrice2 <- rbind(a,matrice2[1:5,],a)
 matrice2 <- aperm(matrice2)
-colnames(matrice2) <- c("Bombe anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
-                        "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Pas de materiel")
+colnames(matrice2) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
+                        "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Kit reparation crevaison pneus","Pas de materiel")
 rownames(matrice2) <- c("0","1","2","3+")
 
 matrice3<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q119 [3]`)
 matrice3[4,] <- colSums(matrice3[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
 matrice3 <- matrice3[-(5:7),] # Supprime les lignes 5,6,7
-matrice3 <- matrice3[,-(4:47)] # Supprime les lignes Autres
+matrice3 <- aperm(matrice3)
 a <- array(c(0,0,0,0))
 a <- aperm(a)
-matrice3 <- aperm(matrice3)
 matrice3 <- rbind(a,a,matrice3,a)
+matrice3[1,] <- colSums(matrice3[c(1,16,17,40),])#colonne categorie kit anti crevaison
+matrice3[18,] <- colSums(matrice3[c(18:35,39,41:43),])#colonne categorie kit repartion crevaison
+matrice3 <- matrice3[-c(6:16,17,19:49),] # Supprime les lignes Autres
 matrice3 <- aperm(matrice3)
-colnames(matrice3) <- c("Bombe anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
-                        "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Pas de materiel")
+colnames(matrice3) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
+                        "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Kit reparation crevaison pneus","Pas de materiel")
 rownames(matrice3) <- c("0","1","2","3+")
 
 matrice4<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q119 [4]`)
 matrice4[4,] <- colSums(matrice4[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
 matrice4 <- matrice4[-(5:7),] # Supprime les lignes 5,6,7
-matrice4 <- matrice4[,-(3:29)] # Supprime les lignes Autres
 a <- array(c(0,0,0,0))
 a <- aperm(a)
 matrice4 <- aperm(matrice4)
-matrice4 <- rbind(a,a,a,matrice4,a)
-matrice4 <- aperm(matrice4)
-colnames(matrice4) <- c("Bombe anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
-                        "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Pas de materiel")
+matrice4 <- rbind(a,a,a,matrice4)
+matrice4[1,] <- matrice4[(14:16),]
+matrice4[14,] <- matrice4[c(16:18,25),]
+matrice4 <- matrice4[-c(6:13,15:32),]# Supprime les lignes Autres
+matrice4
+
+colnames(matrice4) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
+                        "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Kit reparation crevaison pneus","Pas de materiel")
 rownames(matrice4) <- c("0","1","2","3+")
 AFCMatrix<- matrice1+matrice2+matrice3+matrice4
 colnames(AFCMatrix) <- c("a","b","c","d","e","f")
@@ -271,3 +286,29 @@ ggplot(matrice, aes(x = factor(1), y=factor(matrice$Freq), fill=c("0 enfant", "1
     x=c(0,0,0,1),y=c(6,3,1,-0.5), size = 2, show.legend = FALSE
   )
   
+#ACP MELVIL
+df <- data.frame(enfants=donnéesQuestionnaire$`Q12 [1]`, km=donnéesQuestionnaire$`Q97 [1]`, assurance=donnéesQuestionnaire$`Q122 [1]`)
+df <- df[complete.cases(df), ]
+df
+res.pca <- PCA(df, graph = FALSE)
+# Créer une variable aléatoire continue de longueur 10
+set.seed (123)
+my.cont.var <- rnorm (3)
+# Colorer les variables en fonction de la variable continue
+fviz_pca_var(res.pca, col.var = my.cont.var,
+             gradient.cols = c("blue", "yellow", "red"),
+             legend.title = "Cont.Var",
+             repel = TRUE # Évite le chevauchement de texte
+             )
+res.pca$ind
+plot(res.pca)
+
+fviz_pca_ind (res.pca, col.ind = "cos2",
+              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+              repel = FALSE # Évite le chevauchement de texte
+              )
+
+fr <- data.frame(var = c(10, 4, 5, 3, 3, 7, 2, 6, 2, 8, 5),
+                 group = factor(c("c", "a", "b", "a", "b", "b", "a", "b", "a", "c", "c")))#table de données
+fit <- aov(var ~ group, df)# analyse de variance
+summary(fit)
