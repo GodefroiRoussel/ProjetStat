@@ -438,12 +438,12 @@ situationFamiliale <- donnéesQuestionnaire$`Q11 [1]`
 
 # 1. convertir les données en tant que table
 table <- table(modeVacance,situationFamiliale)
+table <- table[,-4]
+rownames(table) <- c("Totalement Organisé", "Semi-Organisé", "En demi-pension", "En pension complète", "Mode aventure", "Mode itinérant")
 table
 
 chisq <- chisq.test(table)
 chisq
-
-df1 <- data.frame(table)
 
 res.ca <- CA(table, graph=TRUE)
 print(res.ca)
@@ -451,8 +451,4 @@ print(res.ca)
 #Affichage des dimensions
 eig.val <- get_eigenvalue (res.ca)
 eig.val
-
-# repel = TRUE pour éviter le chevauchement de texte ne fonctionne pas
-fviz_ca_biplot (res.ca, repel = FALSE)
-fviz_ca_row(res.ca, repel = TRUE)
 
