@@ -329,24 +329,26 @@ matriceCouple
 rownames(matriceCouple) <- c("0","1","2","3+")
 rownames(matriceSeul) <- c("0","1","2","3+")
 
-ggplot(matriceCouple, aes(x = factor(1), y=factor(matriceCouple[,1]), fill=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +")) )+ geom_bar(width = 1,stat="identity")+
+ggplot(matriceCouple, aes(x = factor(1), y=matriceCouple[,1], fill=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +")) )+ geom_bar(width = 1,stat="identity")+
 coord_polar(theta = "y") + 
 theme(axis.text = element_blank())+
 theme(panel.grid=element_blank()) +
 theme(axis.ticks=element_blank()) + labs(title="Personnes en couple partant \n en vacances suivant leur nombre \n d'enfants", x="", y="", fill="Nombre d'enfants")+
 geom_label(
     aes(y = matriceCouple[,1], label = paste(round(matriceCouple[,1],1), " %")), 
-    x=c(0,0,0,-0.2),y=c(-5.5,1,-2,3), size = 2, show.legend = FALSE
+    x=c(1,1,0,1),y=c(0,-15,0,12), size = 2, show.legend = FALSE
 )
-ggplot(matriceSeul, aes(x = factor(1), y=factor(matriceSeul[,1]), fill=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +")) )+ geom_bar(width = 1,stat="identity")+
+
+ggplot(matriceSeul, aes(x = factor(1), y=matriceSeul[,1], fill=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +")) )+ geom_bar(width = 1,stat="identity")+
   coord_polar(theta = "y") + 
   theme(axis.text = element_blank())+
   theme(panel.grid=element_blank()) +
   theme(axis.ticks=element_blank()) + labs(title="Personnes seules partant \n en vacances suivant leur nombre \n d'enfants", x="", y="", fill="Nombre d'enfants")+
   geom_label(
     aes(y = matriceSeul[,1], label = paste(round(matriceSeul[,1],1), " %")), 
-    x=c(0,1,0,0),y=c(-2,-2,1,5), size = 2, show.legend = FALSE
+    x=c(0,1,1,1),y=c(0,17,8,-2), size = 2, show.legend = FALSE
   )
+
 
 # situation:prudence 
 # TODO: supprimer la colonne NRP
