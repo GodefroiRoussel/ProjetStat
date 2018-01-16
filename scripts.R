@@ -2,8 +2,8 @@
 #Imports
 install.packages("dplyr")
 install.packages(factoextra)
-library(factoextra)
 library(ggplot2)
+library(factoextra)
 library(plyr)
 library(readxl)
 library(FactoMineR)
@@ -152,30 +152,55 @@ matriceACM<-rbind(donnéesQuestionnaire$`Q119 [1]`,donnéesQuestionnaire$`Q119 [
 donnéesQuestionnaire$`Q119 [4]`,donnéesQuestionnaire$`Q119 [5]`,donnéesQuestionnaire$`Q119 [6]`)
 matriceACM<-aperm(matriceACM)
 matriceACMtrie<-matriceACM
-if(matriceACM[20,1]=="NA"){
-  matriceACMtrie[20,1]<-0
-  matriceACM[20,1]
-  matriceACM[20,1]
-  matriceACM[20,1]
-} else {
-  matriceACMtrie[1,1]
-  matriceACMtrie[1,1]
-}
-
 
 for(i in 1:1372){
   for(j in 1:6){
-    if(matriceACM[i,j]=='NA' | substring(matriceACM[i,j],1,3)=='AUT'){
+    if(is.na(matriceACM[i,j]) | substring(matriceACM[i,j],1,3)=='AUT'){
         matriceACMtrie[i,j]<-0
-        matriceACM[i,j]
     } else{
-      matriceACMtrie[i,j]<-0
-      matriceACMtrie[i,substring(matriceACM[i,j],1,1)]<-1
+        if(substring(matriceACM[i,j],1,3)=='NSP'){
+          matriceACMtrie[i,j]<-0
+          matriceACMtrie[i,6]<-1
+        }
+        else{
+          matriceACMtrie[i,j]<-0
+          matriceACMtrie[i,as.integer(matriceACM[i,j])]<-1
+        }
     }
   }
 }
-matriceACMtrie
+matriceACMtrie<-aperm(matriceACMtrie)
+res.mca <- MCA(matriceACMtrie, ncp = 5, graph = TRUE)
+fviz_mca_biplot(res.mca)
+matriceSituation<-rbind(donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q11 [1]`)
+matriceSituation<-aperm(matriceSituation)
+matriceSituationTrie<-matriceSituation
+for(j in 1:1372){
+  matriceSituationTrie[j,1]<-0
+  matriceSituationTrie[j,2]<-0
+  matriceSituationTrie[j,3]<-0
+  matriceSituationTrie[j,4]<-0
+  matriceSituationTrie[j,5]<-0
+  switch(matriceSituation[j,1], 
+         "Seul(e) sans enfant"={
+           matriceSituationTrie[j,1]<-1
+         },
+         "Seul(e) avec enfants"={
+           matriceSituationTrie[j,2]<-1
+         },
+         "En couple sans enfant"={
+           matriceSituationTrie[j,3]<-1
+         },
+         "En couple avec enfant(s)"={
+           matriceSituationTrie[j,4]<-1
+         },
+         "Autre"={
+           matriceSituationTrie[j,5]<-1
+         }
+  )
+}
 
+matriceACMtrie<-cbind(matriceACMtrie,matriceSituationTrie)
 
 # Rapport vérif assurance/enfants
 matrice<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q122 [1]`)
