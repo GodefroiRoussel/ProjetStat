@@ -354,9 +354,12 @@ ggplot(matriceSeul, aes(x = factor(1), y=matriceSeul[,1], fill=c("0 enfant", "1 
 # TODO: supprimer la colonne NRP
 matrice<- table(donnéesQuestionnaire$`Q117 [1]`, donnéesQuestionnaire$`Q11 [1]`)
 rownames(matrice) <- c("moins attentif", "plus attentif", "ne change pas")
+matrice<-matrice[,-c(1,4)]
 matrice <- prop.table(matrice)*100
 matrice
-barplot(matrice, beside = TRUE)
+barplot(matrice,main="Prudence en fonction de la situation familiale",ylab="Pourcentages %",beside=TRUE, col=c("#00FFFF","#00FF80","#FFFF00"),ylim=c(0,35), lwd=2, xlab="Situation",las=1)
+legend(x="topright",legend=rownames(matrice),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
+
 
 # situation:centre_interet 
 # TODO: supprimer la colonne NRP
