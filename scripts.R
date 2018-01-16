@@ -1,8 +1,10 @@
 #This file is for testing our scripts before putting them in the shiny app
 #Imports
+install.packages("dplyr")
+install.packages(factoextra)
+library(factoextra)
 library(ggplot2)
 library(plyr)
-install.packages("dplyr")
 library(readxl)
 library(FactoMineR)
 install.packages("factoextra")
@@ -61,47 +63,53 @@ barplot(matrice,main="Nombre de personnes ne prévoyant pas \n de matériel de d
 legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
 matrice
 
-# Rapport matériel de dépannage/enfants
-# Rapport matériel de dépannage/enfants
-matrice1<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q119 [1]`)
-matrice1[4,] <- colSums(matrice1[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
-matrice1 <- matrice1[-(5:7),] # Supprime les lignes 5,6,7
+# AFC LORIS
+# Rapport matériel de dépannage/situation familiale lors du départ (possibilité de faire avec le nb d'enfants et la situation familiale actuelle)
+matrice1<-table(donnéesQuestionnaire$`Q87 [1]`,donnéesQuestionnaire$`Q119 [1]`)
+#matrice1[4,] <- colSums(matrice1[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
+#matrice1 <- matrice1[-(5:7),] # Supprime les lignes 5,6,7
+#matrice1 <- matrice1[-c(1,4),]
+matrice1 <- matrice1[-(6:47),]
 matrice1 <- aperm(matrice1)
 matrice1[1,] <- colSums(matrice1[c(1,10),])
 matrice1[7,] <- colSums(matrice1[c(7,11:15,17,18,21),])
 matrice1 <- matrice1[-c(5,6,8:21),] # Supprime les lignes Autres
 matrice1 <- aperm(matrice1)
-a <- array(c(0,0,0,0))
+a <- array(c(0,0,0,0,0))
 a <- aperm(a)
 matrice1 <- aperm(matrice1)
 matrice1 <- rbind(matrice1[1:2,],a,matrice1[3:6,])
 matrice1 <- aperm(matrice1)
 colnames(matrice1) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
                         "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Kit reparation crevaison pneus","Pas de materiel")
-rownames(matrice1) <- c("0","1","2","3+")
+#rownames(matrice1) <- c("0","1","2","3+")
 
-matrice2<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q119 [2]`)
-matrice2[4,] <- colSums(matrice2[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
-matrice2 <- matrice2[-(5:7),] # Supprime les lignes 5,6,7
+matrice2<-table(donnéesQuestionnaire$`Q87 [1]`,donnéesQuestionnaire$`Q119 [2]`)
+#matrice2[4,] <- colSums(matrice2[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
+#matrice2 <- matrice2[-(5:7),] # Supprime les lignes 5,6,7
+#matrice2 <- matrice2[-c(1,4),]
+matrice2 <- matrice2[-(6:47),]
 matrice2 <- aperm(matrice2)
 matrice2[1,] <- colSums(matrice2[c(1,12,13,14),])#colonne categorie kit anti crevaison
 matrice2[8,] <- colSums(matrice2[c(8,15:27),])#colonne categorie kit repartion crevaison
 matrice2 <- matrice2[-c(5:7,9:30),] # Supprime les lignes Autres
 matrice2 <- aperm(matrice2)
-a <- array(c(0,0,0,0))
+a <- array(c(0,0,0,0,0))
 a <- aperm(a)
 matrice2 <- aperm(matrice2)
 matrice2 <- rbind(a,matrice2[1:5,],a)
 matrice2 <- aperm(matrice2)
 colnames(matrice2) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
                         "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Kit reparation crevaison pneus","Pas de materiel")
-rownames(matrice2) <- c("0","1","2","3+")
+#rownames(matrice2) <- c("0","1","2","3+")
 
-matrice3<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q119 [3]`)
-matrice3[4,] <- colSums(matrice3[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
-matrice3 <- matrice3[-(5:7),] # Supprime les lignes 5,6,7
+matrice3<-table(donnéesQuestionnaire$`Q87 [1]`,donnéesQuestionnaire$`Q119 [3]`)
+#matrice3[4,] <- colSums(matrice3[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
+#matrice3 <- matrice3[-(5:7),] # Supprime les lignes 5,6,7
+#matrice3 <- matrice3[-c(1,4),]
+matrice3 <- matrice3[-(6:47),]
 matrice3 <- aperm(matrice3)
-a <- array(c(0,0,0,0))
+a <- array(c(0,0,0,0,0))
 a <- aperm(a)
 matrice3 <- rbind(a,a,matrice3,a)
 matrice3[1,] <- colSums(matrice3[c(1,16,17,40),])#colonne categorie kit anti crevaison
@@ -110,33 +118,64 @@ matrice3 <- matrice3[-c(6:16,17,19:49),] # Supprime les lignes Autres
 matrice3 <- aperm(matrice3)
 colnames(matrice3) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
                         "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Kit reparation crevaison pneus","Pas de materiel")
-rownames(matrice3) <- c("0","1","2","3+")
+#rownames(matrice3) <- c("0","1","2","3+")
 
-matrice4<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q119 [4]`)
-matrice4[4,] <- colSums(matrice4[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
-matrice4 <- matrice4[-(5:7),] # Supprime les lignes 5,6,7
-a <- array(c(0,0,0,0))
+matrice4<-table(donnéesQuestionnaire$`Q87 [1]`,donnéesQuestionnaire$`Q119 [4]`)
+#matrice4[4,] <- colSums(matrice4[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
+#matrice4 <- matrice4[-(5:7),] # Supprime les lignes 5,6,7
+#matrice4 <- matrice4[-c(1,4),]
+matrice4 <- matrice4[-(6:47),]
+a <- array(c(0,0,0,0,0))
 a <- aperm(a)
 matrice4 <- aperm(matrice4)
-matrice4 <- rbind(a,a,a,matrice4)
-matrice4[1,] <- matrice4[(14:16),]
-matrice4[14,] <- matrice4[c(16:18,25),]
+matrice4 <- rbind(a,a,a,matrice4,a)
+matrice4[1,] <- colSums(matrice4[(14:16),])
+matrice4[14,] <- colSums(matrice4[c(16:18,25),])
 matrice4 <- matrice4[-c(6:13,15:32),]# Supprime les lignes Autres
-matrice4
-
+matrice4 <- aperm(matrice4)
 colnames(matrice4) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
                         "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Kit reparation crevaison pneus","Pas de materiel")
-rownames(matrice4) <- c("0","1","2","3+")
+#rownames(matrice4) <- c("0","1","2","3+")
 AFCMatrix<- matrice1+matrice2+matrice3+matrice4
-colnames(AFCMatrix) <- c("a","b","c","d","e","f")
+colnames(AFCMatrix) <- c("a","b","c","d","e","f","g")
 
 library(factoextra)
+chisq.test(AFCMatrix)
 res.ca <- CA(AFCMatrix)
 print(res.ca)
 fviz_ca_biplot(res.ca)
 barplot(matrice,main="Nombre de personnes ne prévoyant pas \n de matériel de dépannage en vacances \n par rapport au nombre d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
 legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
 matrice
+
+matriceACM<-rbind(donnéesQuestionnaire$`Q119 [1]`,donnéesQuestionnaire$`Q119 [2]`,donnéesQuestionnaire$`Q119 [3]`,
+donnéesQuestionnaire$`Q119 [4]`,donnéesQuestionnaire$`Q119 [5]`,donnéesQuestionnaire$`Q119 [6]`)
+matriceACM<-aperm(matriceACM)
+matriceACMtrie<-matriceACM
+if(matriceACM[20,1]=="NA"){
+  matriceACMtrie[20,1]<-0
+  matriceACM[20,1]
+  matriceACM[20,1]
+  matriceACM[20,1]
+} else {
+  matriceACMtrie[1,1]
+  matriceACMtrie[1,1]
+}
+
+
+for(i in 1:1372){
+  for(j in 1:6){
+    if(matriceACM[i,j]=='NA' | substring(matriceACM[i,j],1,3)=='AUT'){
+        matriceACMtrie[i,j]<-0
+        matriceACM[i,j]
+    } else{
+      matriceACMtrie[i,j]<-0
+      matriceACMtrie[i,substring(matriceACM[i,j],1,1)]<-1
+    }
+  }
+}
+matriceACMtrie
+
 
 # Rapport vérif assurance/enfants
 matrice<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q122 [1]`)
