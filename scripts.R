@@ -304,15 +304,51 @@ ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) 
   )
 
 # nombre d'enfants parmi les gens qui partent en vacances
-matrice <- table(donnéesQuestionnaire$`Q12 [1]`, donnéesQuestionnaire$`Q84 [1]`)
-matrice[4,] <- colSums(matrice[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
-matrice <- matrice[-(5:7),] # Supprime les lignes 5,6,7
-matrice <- matrice[,-1]
-matrice <- prop.table(matrice)*100
-names(matrice) <- c("0","1","2","3+")
-barplot(matrice,main="Proportion des personnes partant \n en vacances suivant leur nombre \n d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
-legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
-matrice
+matrice <- table(donnéesQuestionnaire$`Q12 [1]`, donnéesQuestionnaire$`Q84 [1]`,donnéesQuestionnaire$`Q11 [1]`)
+matriceSeul<- matrice[,,5] + matrice[,,6] # seul 
+matriceCouple<- matrice[,,1] + matrice[,,2] # en couple
+
+matriceSeul[4,2] <- sum(matriceSeul[4:7,2]) #Regroupe les personnes ayant 3,4,5,6 enfants
+matriceSeul <- matriceSeul[-(5:7),] # Supprime les lignes 5,6,7
+matriceSeul <- matriceSeul[,2]
+matriceSeul
+
+
+matriceCouple[4,2] <- sum(matriceCouple[4:7,2]) #Regroupe les personnes ayant 3,4,5,6 enfants
+matriceCouple <- matriceCouple[-(5:7),] # Supprime les lignes 5,6,7
+matriceCouple <- matriceCouple[,2]
+matriceCouple
+
+
+matriceCouple <- data.frame(prop.table(matriceCouple)*100)
+matriceSeul <- data.frame(prop.table(matriceSeul)*100)
+
+matriceSeul
+matriceCouple
+
+rownames(matriceCouple) <- c("0","1","2","3+")
+rownames(matriceSeul) <- c("0","1","2","3+")
+
+ggplot(matriceCouple, aes(x = factor(1), y=matriceCouple[,1], fill=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +")) )+ geom_bar(width = 1,stat="identity")+
+coord_polar(theta = "y") + 
+theme(axis.text = element_blank())+
+theme(panel.grid=element_blank()) +
+theme(axis.ticks=element_blank()) + labs(title="Personnes en couple partant \n en vacances suivant leur nombre \n d'enfants", x="", y="", fill="Nombre d'enfants")+
+geom_label(
+    aes(y = matriceCouple[,1], label = paste(round(matriceCouple[,1],1), " %")), 
+    x=c(1,1,0,1),y=c(0,-15,0,12), size = 2, show.legend = FALSE
+)
+
+ggplot(matriceSeul, aes(x = factor(1), y=matriceSeul[,1], fill=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +")) )+ geom_bar(width = 1,stat="identity")+
+  coord_polar(theta = "y") + 
+  theme(axis.text = element_blank())+
+  theme(panel.grid=element_blank()) +
+  theme(axis.ticks=element_blank()) + labs(title="Personnes seules partant \n en vacances suivant leur nombre \n d'enfants", x="", y="", fill="Nombre d'enfants")+
+  geom_label(
+    aes(y = matriceSeul[,1], label = paste(round(matriceSeul[,1],1), " %")), 
+    x=c(0,1,1,1),y=c(0,17,8,-2), size = 2, show.legend = FALSE
+  )
+
 
 # situation:prudence 
 # TODO: supprimer la colonne NRP
