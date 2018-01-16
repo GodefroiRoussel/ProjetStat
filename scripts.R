@@ -63,11 +63,11 @@ matrice
 
 # AFC LORIS
 # Rapport matériel de dépannage/situation familiale lors du départ (possibilité de faire avec le nb d'enfants et la situation familiale actuelle)
-matrice1<-table(donnéesQuestionnaire$`Q87 [1]`,donnéesQuestionnaire$`Q119 [1]`)
+matrice1<-table(donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q119 [1]`)
 #matrice1[4,] <- colSums(matrice1[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
 #matrice1 <- matrice1[-(5:7),] # Supprime les lignes 5,6,7
-#matrice1 <- matrice1[-c(1,4),]
-matrice1 <- matrice1[-(6:47),]
+matrice1 <- matrice1[-c(1,4),]
+#matrice1 <- matrice1[-(6:47),]
 matrice1 <- aperm(matrice1)
 matrice1[1,] <- colSums(matrice1[c(1,10),])
 matrice1[7,] <- colSums(matrice1[c(7,11:15,17,18,21),])
@@ -82,11 +82,11 @@ colnames(matrice1) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la
                         "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Kit reparation crevaison pneus","Pas de materiel")
 #rownames(matrice1) <- c("0","1","2","3+")
 
-matrice2<-table(donnéesQuestionnaire$`Q87 [1]`,donnéesQuestionnaire$`Q119 [2]`)
+matrice2<-table(donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q119 [2]`)
 #matrice2[4,] <- colSums(matrice2[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
 #matrice2 <- matrice2[-(5:7),] # Supprime les lignes 5,6,7
-#matrice2 <- matrice2[-c(1,4),]
-matrice2 <- matrice2[-(6:47),]
+matrice2 <- matrice2[-c(1,4),]
+#matrice2 <- matrice2[-(6:47),]
 matrice2 <- aperm(matrice2)
 matrice2[1,] <- colSums(matrice2[c(1,12,13,14),])#colonne categorie kit anti crevaison
 matrice2[8,] <- colSums(matrice2[c(8,15:27),])#colonne categorie kit repartion crevaison
@@ -101,11 +101,11 @@ colnames(matrice2) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la
                         "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Kit reparation crevaison pneus","Pas de materiel")
 #rownames(matrice2) <- c("0","1","2","3+")
 
-matrice3<-table(donnéesQuestionnaire$`Q87 [1]`,donnéesQuestionnaire$`Q119 [3]`)
+matrice3<-table(donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q119 [3]`)
 #matrice3[4,] <- colSums(matrice3[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
 #matrice3 <- matrice3[-(5:7),] # Supprime les lignes 5,6,7
-#matrice3 <- matrice3[-c(1,4),]
-matrice3 <- matrice3[-(6:47),]
+matrice3 <- matrice3[-c(1,4),]
+#matrice3 <- matrice3[-(6:47),]
 matrice3 <- aperm(matrice3)
 a <- array(c(0,0,0,0,0))
 a <- aperm(a)
@@ -118,11 +118,11 @@ colnames(matrice3) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la
                         "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Kit reparation crevaison pneus","Pas de materiel")
 #rownames(matrice3) <- c("0","1","2","3+")
 
-matrice4<-table(donnéesQuestionnaire$`Q87 [1]`,donnéesQuestionnaire$`Q119 [4]`)
+matrice4<-table(donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q119 [4]`)
 #matrice4[4,] <- colSums(matrice4[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
 #matrice4 <- matrice4[-(5:7),] # Supprime les lignes 5,6,7
-#matrice4 <- matrice4[-c(1,4),]
-matrice4 <- matrice4[-(6:47),]
+matrice4 <- matrice4[-c(1,4),]
+#matrice4 <- matrice4[-(6:47),]
 a <- array(c(0,0,0,0,0))
 a <- aperm(a)
 matrice4 <- aperm(matrice4)
@@ -133,10 +133,14 @@ matrice4 <- matrice4[-c(6:13,15:32),]# Supprime les lignes Autres
 matrice4 <- aperm(matrice4)
 colnames(matrice4) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
                         "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Kit reparation crevaison pneus","Pas de materiel")
-#rownames(matrice4) <- c("0","1","2","3+")
+rownames(matrice4) <- c("0","1","2","3+")
 AFCMatrix<- matrice1+matrice2+matrice3+matrice4
-colnames(AFCMatrix) <- c("a","b","c","d","e","f","g")
+#colnames(AFCMatrix) <- c("a","b","c","d","e","f","g")
+rownames(AFCMatrix) <- c("0","1","2","3+")
+#rownames(AFCMatrix) <- c("En couple sans enfant","En couple avec vos enfants","Avec des amis",
+#                        "En famille","En solitaire")
 
+AFCMatrix<-aperm(AFCMatrix)
 library(factoextra)
 chisq.test(AFCMatrix)
 res.ca <- CA(AFCMatrix)
@@ -145,6 +149,11 @@ fviz_ca_biplot(res.ca)
 barplot(matrice,main="Nombre de personnes ne prévoyant pas \n de matériel de dépannage en vacances \n par rapport au nombre d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
 legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
 matrice
+
+#AFC
+
+
+
 
 matriceACM<-rbind(donnéesQuestionnaire$`Q119 [1]`,donnéesQuestionnaire$`Q119 [2]`,donnéesQuestionnaire$`Q119 [3]`,
 donnéesQuestionnaire$`Q119 [4]`,donnéesQuestionnaire$`Q119 [5]`,donnéesQuestionnaire$`Q119 [6]`)
@@ -168,6 +177,9 @@ for(i in 1:1372){
   }
 }
 matriceACMtrie<-aperm(matriceACMtrie)
+rownames(matriceACMtrie) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
+                              "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Pas de materiel")
+
 res.mca <- MCA(matriceACMtrie, ncp = 5, graph = TRUE)
 fviz_mca_biplot(res.mca)
 matriceSituation<-rbind(donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q11 [1]`)
@@ -197,8 +209,16 @@ for(j in 1:1372){
          }
   )
 }
-
+matriceACMtrie <- aperm(matriceACMtrie)
 matriceACMtrie<-cbind(matriceACMtrie,matriceSituationTrie)
+colnames(matriceACMtrie) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la chaine", 
+                              "Eau distillées pour batterie",
+                              "Outils divers (clefs/tournevis/bougies...",
+                              "Nanomètre pour contrôler la préssion des pneus",
+                              "Pas de materiel","Seul(e) sans enfant","Seul(e) avec enfants",
+                              "En couple sans enfant", "En couple avec enfant(s)","Autre")
+res.mca <- MCA(matriceACMtrie, quali.sup=7:11,ncp = 5, graph = TRUE)
+fviz_mca_biplot(res.mca)
 
 # Rapport vérif assurance/enfants
 matrice<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q122 [1]`)
