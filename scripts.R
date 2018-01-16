@@ -2,6 +2,8 @@
 #Imports
 install.packages("dplyr")
 install.packages(factoextra)
+install.packages("gplots")
+library("gplots")
 library(ggplot2)
 library(factoextra)
 library(plyr)
@@ -424,4 +426,33 @@ shapiro.test(residuals(mod))
 
 #Boxplot ne fonctionne pas
 boxplot(anova1$nbEnfant~anova1$modeVacance)
+
+
+
+
+
+# AFC : Corrélation entre le mode de vacances et la situation familiale.
+
+modeVacance <- donnéesQuestionnaire$`Q88 [1]`
+situationFamiliale <- donnéesQuestionnaire$`Q11 [1]`
+
+# 1. convertir les données en tant que table
+table <- table(modeVacance,situationFamiliale)
+table
+
+chisq <- chisq.test(table)
+chisq
+
+df1 <- data.frame(table)
+
+res.ca <- CA(table, graph=TRUE)
+print(res.ca)
+
+#Affichage des dimensions
+eig.val <- get_eigenvalue (res.ca)
+eig.val
+
+# repel = TRUE pour éviter le chevauchement de texte ne fonctionne pas
+fviz_ca_biplot (res.ca, repel = FALSE)
+fviz_ca_row(res.ca, repel = TRUE)
 
