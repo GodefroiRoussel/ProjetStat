@@ -354,7 +354,7 @@ summary(fit)
 #Anova Godefroi
 # Les effets du mode de vacances sur le nombre d'enfants dans une famille
 nbEnfant <- donnéesQuestionnaire$`Q12 [1]` # Valeurs
-modeVacance <- factor(c(donnéesQuestionnaire$`Q88 [1]`))# groupes
+modeVacance <- as.factor(c(donnéesQuestionnaire$`Q88 [1]`))# groupes
 
 #Construction du dataframe
 anova1 <- data.frame(nbEnfant,modeVacance)#table de données
