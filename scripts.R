@@ -7,8 +7,6 @@ library(ggplot2)
 library(plyr)
 library(readxl)
 library(FactoMineR)
-install.packages("factoextra")
-library(factoextra)
 donnéesQuestionnaire <- read_excel("donneesVacances.xlsx", sheet="SurveyData_20170220_15h18")
 
 # Pourcentage des gens qui partent ou non en vacances
@@ -351,3 +349,34 @@ fr <- data.frame(var = c(10, 4, 5, 3, 3, 7, 2, 6, 2, 8, 5),
                  group = factor(c("c", "a", "b", "a", "b", "b", "a", "b", "a", "c", "c")))#table de données
 fit <- aov(var ~ group, df)# analyse de variance
 summary(fit)
+
+
+#Anova Godefroi
+# Les effets du mode de vacances sur le nombre d'enfants dans une famille
+nbEnfant <- donnéesQuestionnaire$`Q12 [1]` # Valeurs
+modeVacance <- factor(c(donnéesQuestionnaire$`Q88 [1]`))# groupes
+
+#Construction du dataframe
+anova1 <- data.frame(nbEnfant,modeVacance)#table de données
+print(anova1$modeVacance)
+
+#Construction de l'anova 
+# Sens : mode -> nbEnfant
+mod <- aov(nbEnfant ~ modeVacance, data=df) # y est la variable numérique et A indique les groupes 
+summary(mod)
+print(mod)
+
+#Comparaison multiple
+TukeyHSD(mod)
+
+#Vérification des hypothèses (1)
+x <- split(anova1$nbEnfant,anova1$modeVacance)
+x
+
+#Vérification des hypothèses (2)
+bartlett.test(x)
+shapiro.test(residuals(mod))
+
+#Boxplot ne fonctionne pas
+boxplot(anova1$nbEnfant~anova1$modeVacance)
+
