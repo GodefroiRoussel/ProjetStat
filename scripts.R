@@ -491,3 +491,46 @@ print(res.ca)
 eig.val <- get_eigenvalue (res.ca)
 eig.val
 
+
+
+#ACM Situation Familiale, Distance parcourue pour aller en vacances, Comment vous rendez-vous sur place, Comment vous déplacez-vous sur place?
+situationFamiliale <- donnéesQuestionnaire$`Q11 [1]`
+distanceParcourue <- donnéesQuestionnaire$`Q97 [1]`
+moyenDeplacementSurPlace <- donnéesQuestionnaire$`Q89 [1]`
+moyenDeplacement <- donnéesQuestionnaire$`Q90 [1]`
+
+table2 <- rbind(situationFamiliale,distanceParcourue,moyenDeplacementSurPlace,moyenDeplacement)
+table2
+
+res.acm <- MCA(table2)
+
+
+#AFC Situation familiale et corrélation avec Partez-vous le plus souvent : 
+situationFamiliale <- donnéesQuestionnaire$`Q11 [1]`
+accompagnateur <- donnéesQuestionnaire$`Q87 [1]`
+
+# 1. convertir les données en tant que table
+table3 <- table(accompagnateur,situationFamiliale)
+table3 <- table3[-(6:47),-4]
+rownames(table3) <- c("En couple sans enfant", "En couple avec vos enfants", "Avec des amis", "En famille", "En solitaire")
+table3
+
+chisq <- chisq.test(table3)
+chisq
+
+res.ca2 <- CA(table3, graph=FALSE)
+print(res.ca2)
+
+#Affichage des dimensions
+eig.val <- get_eigenvalue (res.ca2)
+eig.val
+
+
+
+
+
+#matriceACMtrie<-aperm(matriceACMtrie)
+#rownames(matriceACMtrie) <- c("Kit anti-crevaison", "Huile de moteur / graisse pour la chaine", "Eau distillées pour batterie",
+#                              "Outils divers (clefs/tournevis/bougies...","Nanomètre pour contrôler la préssion des pneus","Pas de materiel")
+
+#res.mca <- MCA(matriceACMtrie, ncp = 5, graph = TRUE)
