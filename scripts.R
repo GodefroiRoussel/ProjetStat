@@ -36,8 +36,6 @@ barplot(matrice,main="Situation personnelle par apport \n à la distance effectu
 legend(x="topleft",legend=c("En couple", "Seul(e)"),cex=1,fill=c("#00FFFF","#FF0000"),bty="n")
 matrice
 
-
-
 # Rapport distance/enfants
 matrice<-prop.table( table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q97 [1]`),2)*100
 matrice[4,] <- colSums(matrice[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
@@ -151,12 +149,73 @@ fviz_ca_biplot(res.ca)
 barplot(matrice,main="Nombre de personnes ne prévoyant pas \n de matériel de dépannage en vacances \n par rapport au nombre d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
 legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
 matrice
+#Fin AFC
 
-#AFC
+#AFC situation familiale/transport de déplacement pour aller en vacances
+matrice<-table(donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q89 [1]`)
+matrice <- matrice[,-(8:20)]
+matrice <- matrice[-4,]
+colnames(matrice) <- c("en 2-roues", "en voiture", "en train", "en avion", "en bateau",
+                       "en camping car","en voiture avec votre 2-roues sur remorque ou van")
+rownames(matrice)
+chisq.test(matrice) #pvalue = 2.2e-16
+res.ca <- CA(matrice)
+fviz_ca_biplot(res.ca)
+barplot(res.ca$eig[, 2], main= "Histogramme des valeurs propres ", names.arg=rownames(res.ca$eig), xlab= "Axes", ylab= "Pourcentage d’inertie", cex.axis=0.8, font.lab=3, col= "orange")
+#Fin AFC
 
+km à 2 roue 43, situation familiale 11, material depannage 119, attitude route
+#AFC situation familiale/transport de deplacement pendant les vacances
+matrice<-table(donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q90 [1]`)
+matrice <- matrice[-4,]
+matrice <- matrice[,-(7:15)]
+colnames(matrice) <- c("A pied", "En vélo", "En voiture", "En 2-roues", "En transport en commun",
+                       "En camping-car")
+chisq.test(matrice) #p-value = 0.0002794
+res.ca <- CA(matrice)
+fviz_ca_biplot(res.ca)
+#Fin AFC
 
+#AFC situation familiale / Material a disposition
+matrice1 <- table(donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q118 [1]`)
+matrice1 <- matrice1[-4,]
+colnames(matrice1) <- c("GPS","Bagagerie","Système de communication du type intercom","Rien de tout ceci")
 
+matrice2<- table(donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q118 [2]`)
+matrice2 <- matrice2[-4,]
+a <- array(c(0,0,0,0,0))
+a <- aperm(a)
+matrice2 <- aperm(matrice2)
+matrice2 <- rbind(a,matrice2,a)
+matrice2 <- aperm(matrice2)
+colnames(matrice2) <- c("GPS","Bagagerie","Système de communication du type intercom","Rien de tout ceci")
 
+matrice3<- table(donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q118 [3]`)
+matrice3 <- matrice3[-4,]
+a <- array(c(0,0,0,0,0))
+a <- aperm(a)
+matrice3 <- rbind(a,a,matrice3,a)
+matrice3 <- aperm(matrice3)
+colnames(matrice3) <- c("GPS","Bagagerie","Système de communication du type intercom","Rien de tout ceci")
+
+matriceAFC<-matrice1+matrice2+matrice3
+
+chisq.test(matriceAFC) #p-value = 9.663e-06
+res.ca <- CA(matriceAFC)
+fviz_ca_biplot(res.ca)
+#fin AFC
+
+#AFC nb enfants/distance parcourue
+matrice<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q97 [1]`)
+matrice[4,] <- colSums(matrice[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
+matrice <- matrice[-(5:7),] # Supprime les lignes 5,6,7
+colnames(matrice) <- c("-100km","100-500","500-1000","+1000")
+matrice <- as.factor(matrice[,1])
+chisq.test(matrice) #p-value = 0.0002794
+res.ca <- CA(matrice)
+fviz_ca_biplot(res.ca) 
+
+#ACM
 matriceACM<-rbind(donnéesQuestionnaire$`Q119 [1]`,donnéesQuestionnaire$`Q119 [2]`,donnéesQuestionnaire$`Q119 [3]`,
 donnéesQuestionnaire$`Q119 [4]`,donnéesQuestionnaire$`Q119 [5]`,donnéesQuestionnaire$`Q119 [6]`)
 matriceACM<-aperm(matriceACM)
@@ -221,6 +280,7 @@ colnames(matriceACMtrie) <- c("Kit anti-crevaison", "Huile de moteur / graisse p
                               "En couple sans enfant", "En couple avec enfant(s)","Autre")
 res.mca <- MCA(matriceACMtrie, quali.sup=7:11,ncp = 5, graph = TRUE)
 fviz_mca_biplot(res.mca)
+#Fin ACM
 
 # Rapport vérif assurance/enfants
 matrice<-table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire$`Q122 [1]`)
@@ -451,6 +511,9 @@ print(res.ca)
 #Affichage des dimensions
 eig.val <- get_eigenvalue (res.ca)
 eig.val
+matricetest<-donnéesQuestionnaire$`Q11 [1]`
+
+
 
 # repel = TRUE pour éviter le chevauchement de texte ne fonctionne pas
 fviz_ca_biplot (res.ca, repel = FALSE)
