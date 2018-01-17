@@ -13,12 +13,13 @@ donnéesQuestionnaire <- read_excel("donneesVacances.xlsx", sheet="SurveyData_20
 
 # Pourcentage des gens qui partent ou non en vacances
 # Problème au niveau de l'affichage
-vacances <-data.frame(count=prop.table(table(donnéesQuestionnaire$`Q84 [1]`)), rep=c("Non","Oui"))
-ggplot(vacances, aes(x = factor(1), y=data$count.Freq,fill=factor(data$rep)) ) + geom_bar(width = 1,stat="identity")+coord_polar(theta = "y") + ylab("") + xlab("") + ggtitle("Partez-vous en vacances ? ") + guides(fill=guide_legend(title="Réponse"))+ theme(axis.ticks=element_blank()) + theme(plot.title = element_text(hjust = 0.5)) + geom_label(aes(label=paste(round(data$count.Freq,1),"%"),x=c(1,1),y=c(0,15)),inherit.aes = TRUE, show.legend = FALSE)
-donnéesQuestionnaire <-data.frame(count=prop.table(table(donnéesQuestionnaire$`Q87 [1]`)), rep=c("Non","Oui"))
-bar <- ggplot(donnéesQuestionnaire, aes(x = factor(1), fill = factor(modevacances)))+ geom_bar(width = 1) + ggtitle("Partez-vous en vacances?") +
-  xlab(" ") + ylab(" ") +   theme(plot.title = element_text(hjust = 0.5))
-
+vacances <-data.frame(prop.table(table(donnéesQuestionnaire$`Q84 [1]`))*100, rep=c("Non","Oui"))
+ggplot(vacances, aes(x = factor(1), y=vacances$Freq,fill=factor(vacances$rep)) ) + geom_bar(width = 1,stat="identity")+
+  ylab("") + xlab("") + ggtitle("Partez-vous en vacances ? ") + 
+  guides(fill=guide_legend(title="Réponse"))+ theme(axis.ticks=element_blank()) + 
+  theme(plot.title = element_text(hjust = 0.5)) + 
+  geom_label(aes(label=paste(round(vacances$Freq,1),"%"),x=c(1,0),y=c(0,0)),inherit.aes = TRUE, show.legend = FALSE)+
+  scale_fill_manual(values=c("#4A83D9", "#E68527"))+coord_polar(theta = "y")
 
 
 # Rapport distance/situation
@@ -31,9 +32,9 @@ matrice[2,] <- colSums(matrice[2:3,], na.rm = FALSE, dims = 1) #Regroupe les per
 matrice <- matrice[-(3),] # Supprime les non réponses
 matrice
 colnames(matrice) <- c("Moins de 100 km", "Entre 100 et 500 km", "Entre 500 et 1000 km", "Plus de 1 000 km")
-barplot(matrice,main="Situation personnelle par apport \n à la distance effectuée en vacances",beside=FALSE, col=c("#00FFFF","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
-barplot(matrice,main="Situation personnelle par apport \n à la distance effectuée en vacances",ylab="Pourcentage par enfant",beside=TRUE, col=c("#00FFFF","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants") 
-legend(x="topleft",legend=c("En couple", "Seul(e)"),cex=1,fill=c("#00FFFF","#FF0000"),bty="n")
+barplot(matrice,main="Situation personnelle par rapport \n à la distance effectuée en vacances",beside=FALSE, col=c("#4A83DA","#CA66BF"),ylim=c(0,100), lwd=2, xlab="Distance effectuée")
+barplot(matrice,main="Situation personnelle par rapport \n à la distance effectuée en vacances",ylab="Pourcentage",beside=TRUE, col=c("#4A83DA","#CA66BF"),ylim=c(0,100), lwd=2, xlab="Distance effectuée") 
+legend(x="topright",legend=c("En couple", "Seul(e)"),cex=1,fill=c("#4A83DA","#CA66BF"),bty="n")
 matrice
 
 
@@ -43,9 +44,9 @@ matrice<-prop.table( table(donnéesQuestionnaire$`Q12 [1]`,donnéesQuestionnaire
 matrice[4,] <- colSums(matrice[4:7,], na.rm = FALSE, dims = 1) #Regroupe les personnes ayant 3,4,5,6 enfants
 matrice <- matrice[-(5:7),] # Supprime les lignes 4,5,6
 colnames(matrice) <- c("Moins de 100 km", "Entre 100 et 500 km", "Entre 500 et 1000 km", "Plus de 1 000 km")
-barplot(matrice,main="Nombre d'enfants par rapport \n à la distance effectuée en vacances",ylab="Pourcentage par enfant",beside=FALSE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
-barplot(matrice,main=" Nombre d'enfants par rapport \n à la distance effectuée en vacances",ylab="Pourcentage par enfant",beside=TRUE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
-legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
+barplot(matrice,main="Nombre d'enfants par rapport \n à la distance effectuée en vacances",ylab="Pourcentage",beside=FALSE, col=c( "#4A83DA","#00FF80","#E68527","#CA66BF"),ylim=c(0,70), lwd=2, xlab="Distance effectuée")
+barplot(matrice,main=" Nombre d'enfants par rapport \n à la distance effectuée en vacances",ylab="Pourcentage",beside=TRUE, col=c( "#4A83DA","#00FF80","#E68527","#CA66BF"),ylim=c(0,70), lwd=2, xlab="Distance effectuée")
+legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#4A83DA","#00FF80","#E68527","#CA66BF"),bty="n")
 matrice
 
 # Rapport matériel de dépannage/enfants
@@ -59,8 +60,8 @@ matrice <- matrice[-(2:21),] # Supprime les lignes 5 à 21
 matrice <- aperm(matrice)
 colnames(matrice) <- c("Oui", "Non")
 matrice<-prop.table(matrice,1)*100
-barplot(matrice,main="Nombre de personnes ne prévoyant pas \n de matériel de dépannage en vacances \n par rapport au nombre d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
-legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
+barplot(matrice,main="Nombre de personnes ne prévoyant pas \n de matériel de dépannage en vacances \n par rapport au nombre d'enfants",ylab="Pourcentage",beside=TRUE, col=c( "#4A83DA","#00FF80","#E68527","#CA66BF"),ylim=c(0,100), lwd=2, xlab="Réponse")
+  legend(x="topright",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#4A83DA","#00FF80","#E68527","#CA66BF"),bty="n")
 matrice
 
 # AFC LORIS
@@ -148,8 +149,8 @@ chisq.test(AFCMatrix)
 res.ca <- CA(AFCMatrix)
 print(res.ca)
 fviz_ca_biplot(res.ca)
-barplot(matrice,main="Nombre de personnes ne prévoyant pas \n de matériel de dépannage en vacances \n par rapport au nombre d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
-legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
+barplot(matrice,main="Nombre de personnes ne prévoyant pas \n de matériel de dépannage en vacances \n par rapport au nombre d'enfants",ylab="Pourcentage",beside=TRUE, col=c( "#4A83DA","#00FF80","#E68527","#CA66BF"),ylim=c(0,100), lwd=2, xlab="Réponse")
+legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#4A83DA","#00FF80","#E68527","#CA66BF"),bty="n")
 matrice
 
 #AFC
@@ -228,8 +229,8 @@ matrice[4,] <- colSums(matrice[4:7,], na.rm = FALSE, dims = 1) #Regroupe les per
 matrice <- matrice[-(5:7),] # Supprime les lignes 5,6,7
 matrice<-prop.table(matrice,1)*100 #pourçentage sur les lignes
 colnames(matrice) <- c("Oui", "Non")
-barplot(matrice,main="Proportion des personnes vérifiants \n leur assurance 2-roues avant de partir \n par rapport au nombre d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c( "#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
-legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
+barplot(matrice,main="Proportion des personnes vérifiants \n leur assurance 2-roues avant de partir \n par rapport au nombre d'enfants",ylab="Pourcentage",beside=TRUE, col=c( "#4A83DA","#00FF80","#E68527","#CA66BF"),ylim=c(0,100), lwd=2, xlab="Réponse")
+legend(x="topleft",legend=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#4A83DA","#00FF80","#E68527","#CA66BF"),bty="n")
 matrice
 
 # Rapport révision/enfants
@@ -242,8 +243,8 @@ matrice<-matrice[-(2:3),] # Supprime les lignes 2,3
 matrice<-aperm(matrice) # transposition de la matrice
 matrice<-prop.table(matrice,1)*100 #pourçentage sur les lignes
 colnames(matrice) <- c("Oui", "Non")
-barplot(matrice,main="Proportion des personnes effectuant \n une révision de leur 2-roues avant leur départ \n par rapport au nombre d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
-legend(x="topleft",legend=c("0 enfants", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
+barplot(matrice,main="Proportion des personnes effectuant \n une révision de leur 2-roues avant leur départ \n par rapport au nombre d'enfants",ylab="Pourcentage",beside=TRUE, col=c("#4A83DA","#00FF80","#E68527","#CA66BF"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
+legend(x="topleft",legend=c("0 enfants", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#4A83DA","#00FF80","#E68527","#CA66BF"),bty="n")
 matrice
 
 #Rapport révision/enfant pour départ sans enfants
@@ -257,8 +258,8 @@ matrice<-matrice[-(2:3),] # Supprime les lignes 2,3
 matrice<-aperm(matrice) # transposition de la matrice
 matrice<-prop.table(matrice,1)*100
 colnames(matrice) <- c("Oui", "Non")
-barplot(matrice,main="Proportion des personnes effectuant \n une révision de leur 2-roues avant leur départ \n sans enfants par rapport au nombre d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
-legend(x="topleft",legend=c("0 enfants", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
+barplot(matrice,main="Proportion des personnes effectuant \n une révision de leur 2-roues avant leur départ \n sans enfants par rapport au nombre d'enfants",ylab="Pourcentage",beside=TRUE, col=c("#4A83DA","#00FF80","#E68527","#CA66BF"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
+legend(x="topleft",legend=c("0 enfants", "1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#4A83DA","#00FF80","#E68527","#CA66BF"),bty="n")
 matrice
 
 #Rapport révision/enfant pour départ avec enfants
@@ -274,8 +275,8 @@ matrice<-matrice[-(2:3),] # Supprime les lignes 2,3
 matrice<-aperm(matrice) # transposition de la matrice
 matrice<-prop.table(matrice,1)*100
 colnames(matrice) <- c("Oui", "Non")
-barplot(matrice,main="Proportion des personnes effectuant \n une révision de leur 2-roues avant leur départ avec \n leur enfants par rapport au nombre d'enfants",ylab="Pourcentage par enfant",beside=TRUE, col=c("#00FF80","#FFFF00","#FF0000"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
-legend(x="topleft",legend=c("1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FF80","#FFFF00","#FF0000"),bty="n")
+barplot(matrice,main="Proportion des personnes effectuant \n une révision de leur 2-roues avant leur départ avec \n leur enfants par rapport au nombre d'enfants",ylab="Pourcentage",beside=TRUE, col=c("#00FF80","#E68527","#CA66BF"),ylim=c(0,100), lwd=2, xlab="Nombre d'enfants")
+legend(x="topleft",legend=c("1 enfant", "2 enfants", "3 enfants et +"),cex=1,fill=c("#00FF80","#E68527","#CA66BF"),bty="n")
 matrice
 
 
@@ -285,11 +286,12 @@ matrice <- table(matrice[matrice %in% c("1","2","3","4","5")])
 matrice<-prop.table(matrice)*100
 names(matrice) <- c("en couple sans enfant","en couple avec vos enfants","avec des amis","en famille (parents, beaux-parents, frères, sœurs, ...)","en solitaire")
 matrice <- data.frame(matrice)
-ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) + geom_bar(width = 1,stat="identity")+coord_polar(theta = "y") + theme(panel.grid=element_blank()) +
+ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) + geom_bar(width = 1,stat="identity")+theme(panel.grid=element_blank()) +
   theme(axis.ticks=element_blank()) + labs(title="Avec qui partez vous en vacances ?", x="", y="", fill="")+ geom_label(
     aes(y = matrice$Freq, label = paste(round(matrice$Freq,1), " %")), 
     hjust = c(1.2,0.5,-0.8,-0.5,1.1), size = 2, show.legend = FALSE
-  )
+  )+ 
+  scale_fill_manual(values=c("#4A83D9", "#69B940", "#CA66BF","#8C5C98","#E68527"))+coord_polar(theta = "y")
 
 # départ en vacances Oui/Non
 matrice <- donnéesQuestionnaire$`Q87 [1]`
@@ -297,11 +299,12 @@ matrice <- prop.table(table(donnéesQuestionnaire$`Q84 [1]`))
 names(matrice) <- c("Non","Oui")
 matrice <- data.frame(matrice)
 matrice$Freq <- matrice$Freq*100
-ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) + geom_bar(width = 1,stat="identity")+coord_polar(theta = "y") + theme(panel.grid=element_blank()) +
+ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) + geom_bar(width = 1,stat="identity")+ theme(panel.grid=element_blank()) +
   theme(axis.ticks=element_blank()) + labs(title="Partez vous en vacances ?", x="", y="", fill="")+ geom_label(
     aes(y = matrice$Freq, label = paste(round(matrice$Freq,1), " %")), 
     x = c(1,0), y=c(0,0), size = 2, show.legend = FALSE
-  )
+  )+ 
+  scale_fill_manual(values=c("#4A83D9", "#69B940", "#CA66BF","#8C5C98","#E68527"))+coord_polar(theta = "y")
 
 # nombre d'enfants parmi les gens qui partent en vacances
 matrice <- table(donnéesQuestionnaire$`Q12 [1]`, donnéesQuestionnaire$`Q84 [1]`,donnéesQuestionnaire$`Q11 [1]`)
@@ -330,24 +333,24 @@ rownames(matriceCouple) <- c("0","1","2","3+")
 rownames(matriceSeul) <- c("0","1","2","3+")
 
 ggplot(matriceCouple, aes(x = factor(1), y=matriceCouple[,1], fill=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +")) )+ geom_bar(width = 1,stat="identity")+
-coord_polar(theta = "y") + 
 theme(axis.text = element_blank())+
 theme(panel.grid=element_blank()) +
 theme(axis.ticks=element_blank()) + labs(title="Personnes en couple partant \n en vacances suivant leur nombre \n d'enfants", x="", y="", fill="Nombre d'enfants")+
 geom_label(
     aes(y = matriceCouple[,1], label = paste(round(matriceCouple[,1],1), " %")), 
     x=c(1,1,0,1),y=c(0,-15,0,12), size = 2, show.legend = FALSE
-)
+)+ 
+  scale_fill_manual(values=c("#4A83D9", "#69B940", "#CA66BF","#8C5C98","#E68527"))+coord_polar(theta = "y")
 
 ggplot(matriceSeul, aes(x = factor(1), y=matriceSeul[,1], fill=c("0 enfant", "1 enfant", "2 enfants", "3 enfants et +")) )+ geom_bar(width = 1,stat="identity")+
-  coord_polar(theta = "y") + 
   theme(axis.text = element_blank())+
   theme(panel.grid=element_blank()) +
   theme(axis.ticks=element_blank()) + labs(title="Personnes seules partant \n en vacances suivant leur nombre \n d'enfants", x="", y="", fill="Nombre d'enfants")+
   geom_label(
     aes(y = matriceSeul[,1], label = paste(round(matriceSeul[,1],1), " %")), 
     x=c(0,1,1,1),y=c(0,17,8,-2), size = 2, show.legend = FALSE
-  )
+  )+ 
+  scale_fill_manual(values=c("#4A83D9", "#69B940", "#CA66BF","#8C5C98","#E68527"))+coord_polar(theta = "y")
 
 
 # situation:prudence 
@@ -357,9 +360,8 @@ rownames(matrice) <- c("moins attentif", "plus attentif", "ne change pas")
 matrice<-matrice[,-c(1,4)]
 matrice <- prop.table(matrice)*100
 matrice
-barplot(matrice,main="Prudence en fonction de la situation familiale",ylab="Pourcentages %",beside=TRUE, col=c("#00FFFF","#00FF80","#FFFF00"),ylim=c(0,35), lwd=2, xlab="Situation",las=1)
-legend(x="topright",legend=rownames(matrice),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
-
+barplot(matrice,main="Prudence en fonction de la situation familiale",ylab="Pourcentages %",beside=TRUE, col=c("#4A83D9", "#69B940", "#CA66BF"),ylim=c(0,35), lwd=2, xlab="Situation",las=1)
+legend(x="topright",legend=rownames(matrice),cex=1,fill=c("#4A83D9", "#69B940", "#CA66BF"),bty="n")
 
 # situation:centre_interet 
 # TODO: supprimer la colonne NRP
@@ -368,8 +370,8 @@ matrice<- table(donnéesQuestionnaire$`Q103 [1]`, donnéesQuestionnaire$`Q11 [1]
 matrice<-matrice[1:4,c(2,3,5,6)]
 rownames(matrice) <- c("Tourisme culturel", "Belles routes, paysages,", "Rassemblements, manifestations sportives","Rendre visite à des amis ou de la famille")
 matrice <- prop.table(matrice,2)*100
-barplot(matrice,main="Centre d'intêret en fonction de la situation",ylab="Pourcentages %",beside=TRUE, col=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),ylim=c(0,70), lwd=2, xlab="Situation",las=1)
-legend(x="topright",legend=c("Tourisme culturel", "Belles routes, paysages", "Rassemblements, manifestations sportives", "Rendre visite à des amis ou de la famille"),cex=1,fill=c("#00FFFF","#00FF80","#FFFF00","#FF0000"),bty="n")
+barplot(matrice,main="Centre d'intêret en fonction de la situation",ylab="Pourcentages %",beside=TRUE, col=c("#4A83D9", "#69B940", "#CA66BF","#8C5C98"),ylim=c(0,70), lwd=2, xlab="Situation",las=1)
+legend(x="topright",legend=c("Tourisme culturel", "Belles routes, paysages", "Rassemblements, manifestations sportives", "Rendre visite à des amis ou de la famille"),cex=1,fill=c("#4A83D9", "#69B940", "#CA66BF","#8C5C98"),bty="n")
 
 # départ en vacances Oui/Non en fonction de s'ils ont des enfants
 matrice <- table(donnéesQuestionnaire$`Q11 [1]`,donnéesQuestionnaire$`Q84 [1]`)
@@ -384,11 +386,13 @@ matrice <- data.frame(matrice)
 matrice$Freq<-round(matrice$Freq,1)
 matrice <- matrice[3:4,]
 
-ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) + geom_bar(width = 1,stat="identity")+coord_polar(theta = "y") + theme(panel.grid=element_blank()) +
+ggplot(matrice, aes(x = factor(1), y=matrice$Freq, fill=factor(matrice$Var1)) ) + geom_bar(width = 1,stat="identity") + theme(panel.grid=element_blank()) +
   theme(axis.ticks=element_blank()) + labs(title="Situation des personnes partant en vacances ?", x="", y="", fill="Situation")+ geom_label(
     aes(y = matrice$Freq, label = paste(round(matrice$Freq,1), " %")), 
-    hjust = c(0,1), size = 2, show.legend = FALSE
-  )
+    hjust = c(0,1), size = 3, show.legend = FALSE
+  )+ 
+  scale_fill_manual(values=c("#4A83D9", "#E68527"))+coord_polar(theta = "y")
+
 
 # nombre d'enfants parmi les gens qui partent en vacances
 matrice <- table(donnéesQuestionnaire$`Q12 [1]`, donnéesQuestionnaire$`Q84 [1]`)
@@ -407,7 +411,9 @@ ggplot(matrice, aes(x = factor(1), y=factor(matrice$Freq), fill=c("0 enfant", "1
   geom_label(
     aes(y = matrice$Freq, label = paste(matrice$Freq, " %")), 
     x=c(0,0,0,1),y=c(6,3,1,-0.5), size = 2, show.legend = FALSE
-  )
+  )+ 
+  scale_fill_manual(values=c("#4A83D9", "#69B940", "#CA66BF","#8C5C98","#E68527"))+coord_polar(theta = "y")
+
   
 #ACP MELVIL
 df <- data.frame(enfants=donnéesQuestionnaire$`Q12 [1]`, km=donnéesQuestionnaire$`Q97 [1]`, assurance=donnéesQuestionnaire$`Q122 [1]`)
